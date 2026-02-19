@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Villa CABOUA – Réservation Ultra-Luxe</title>
+
+<!-- FullCalendar -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/google-calendar.global.min.js"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Stripe -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f7f7f7;color:#333;}
+header{position:relative;height:500px;background:linear-gradient(rgba(0,0,0,0.35),rgba(0,0,0,0.35)),url('BUDDHA.jpg') center/cover no-repeat;color:white;display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;}
+header h1{font-size:3rem;margin:0;background:linear-gradient(90deg,red,orange,yellow,green,cyan,blue,violet);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rainbowMove 5s linear infinite;}
+@keyframes rainbowMove{0%{background-position:0% 50%;}100%{background-position:100% 50%;}}
+header p{font-size:1.2rem;margin-top:10px;}
+nav{background:#2c3e50;padding:10px;text-align:center;}
+nav a{color:white;margin:0 15px;text-decoration:none;font-weight:bold;}
+nav a:hover{text-decoration:underline;}
+main{max-width:1200px;margin:auto;padding:20px;}
+.section-title{color:#2c3e50;margin-bottom:20px;font-size:2rem;text-align:center;}
+.flex-container{display:flex;flex-wrap:wrap;gap:40px;margin-bottom:40px;}
+.flex-left{flex:2;min-width:300px;}
+.flex-right{flex:1;min-width:280px;background:white;padding:20px;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,0.08);}
+label{display:block;margin:10px 0 5px;font-weight:bold;}
+input, select{width:100%;padding:10px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;}
+button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:6px;font-size:1rem;cursor:pointer;}
+#bookNow{background:#e67e22;color:white;}
+#contactHost{background:#2c3e50;color:white;}
+.equip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:22px;margin-top:20px;}
+.equip-main{background:linear-gradient(135deg,#27ae60,#2ecc71);color:white;font-weight:bold;font-size:1rem;padding:15px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.card{background:white;padding:15px;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,0.08);text-align:center;font-weight:500;transition:transform 0.5s ease,box-shadow 0.5s ease;opacity:0;transform:translateY(40px);}
+.card.visible{animation:fadeUp 0.9s ease forwards;}
+.card i{font-size:24px;margin-bottom:8px;color:#27ae60;}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:20px;}
+.gallery img{width:100%;border-radius:8px;}
+#calendar-wrapper{margin-top:20px;}
+.fc{background:white;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,0.08);}
+footer{text-align:center;padding:20px;background:#2c3e50;color:white;margin-top:40px;}
+.whatsapp-float{position:fixed;bottom:20px;right:20px;width:60px;height:60px;background:#25D366;border-radius:50%;display:none;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:1000;animation:pulse 2s infinite;}
+.whatsapp-float svg{width:34px;height:34px;fill:white;}
+@keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.08);}100%{transform:scale(1);}}
+
+/* Responsive */
+@media(max-width:900px){.flex-container{flex-direction:column;}}
+@media(max-width:768px){.whatsapp-float{display:flex;}}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>VILLA CABOUA</h1>
+<p>Calme et sérénité en Guadeloupe</p>
+</header>
+
+<nav>
+<a href="#description">Description</a>
+<a href="#equipements">Équipements</a>
+<a href="#photos">Photos</a>
+<a href="#disponibilites">Disponibilités</a>
+<a href="#reservation">Réservation</a>
+<a href="#contact">Contact</a>
+</nav>
+
+<main>
+<!-- Description -->
+<section id="description">
+<h2 class="section-title">🌴 Villa CABOUA – Calme et sérénité en Guadeloupe 🌴</h2>
+<p>Villa ultra-luxe entre la mer et la forêt tropicale. Idéale pour un séjour relaxant.</p>
+<ul>
+<li>Terrasse aménagée avec coin repas et salon détente</li>
+<li>Cuisine équipée : induction, four, micro-ondes, cafetière, bouilloire, grille-pain, réfrigérateur, lave-linge</li>
+<li>Suite parentale climatisée avec lit 160×200 et salle d’eau</li>
+<li>Deux chambres climatisées avec lits 160×200</li>
+<li>Salle d’eau et WC indépendants</li>
+<li>Canapé convertible</li>
+<li>Minimum 4 nuits, remise 10% dès 7 nuits</li>
+</ul>
+</section>
+
+<!-- Équipements -->
+<section id="equipements">
+<h2 class="section-title">Équipements & Confort</h2>
+<div class="equip-grid">
+<div class="equip-main"><i class="fa-solid fa-wifi"></i>Internet haut débit</div>
+<div class="equip-main"><i class="fa-solid fa-snowflake"></i>Climatisation</div>
+<div class="equip-main"><i class="fa-solid fa-square-parking"></i>Parking privé</div>
+<div class="card"><i class="fa-solid fa-broom"></i>Lave-linge</div>
+<div class="card"><i class="fa-solid fa-couch"></i>Canapé</div>
+<div class="card"><i class="fa-solid fa-bed"></i>Draps fournis</div>
+<div class="card"><i class="fa-solid fa-utensils"></i>Ustensiles cuisine</div>
+<div class="card"><i class="fa-solid fa-tv"></i>Télévision</div>
+<div class="card"><i class="fa-solid fa-umbrella-beach"></i>Terrasse</div>
+<div class="card"><i class="fa-solid fa-seedling"></i>Jardin</div>
+</div>
+</section>
+
+<!-- Galerie -->
+<section id="photos">
+<h2 class="section-title">Galerie photos</h2>
+<div class="gallery">
+<img src="https://via.placeholder.com/400x300" alt="Salon">
+<img src="https://via.placeholder.com/400x300" alt="Cuisine">
+<img src="https://via.placeholder.com/400x300" alt="Chambre">
+<img src="https://via.placeholder.com/400x300" alt="Jardin">
+</div>
+</section>
+
+<!-- Disponibilités -->
+<section id="disponibilites">
+<h2 class="section-title">Sélectionnez vos dates</h2>
+<div id="calendar-wrapper"><div id="calendar" class="fc"></div></div>
+</section>
+
+<!-- Réservation -->
+<section id="reservation">
+<div class="flex-container">
+<div class="flex-left">
+<h2 class="section-title">Réservez votre séjour</h2>
+<label>Dates</label>
+<input type="date" id="startDate">
+<input type="date" id="endDate">
+<label>Voyageurs</label>
+<select id="guests">
+<option value="1">1 Voyageur</option>
+<option value="2" selected>2 Voyageurs</option>
+<option value="3">3 Voyageurs</option>
+<option value="4">4 Voyageurs</option>
+<option value="5">5 Voyageurs</option>
+<option value="6">6 Voyageurs</option>
+</select>
+<p id="totalPrice" style="margin-top:10px;font-weight:bold;"></p>
+<button id="bookNow">Réserver maintenant</button>
+<button id="contactHost">Contactez l’hôte</button>
+</div>
+</div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+<h2 class="section-title">Contact & réservation</h2>
+<p>📧 villa.caboua@gmail.com<br>📞 06 90 52 06 16</p>
+</section>
+
+<footer>
+<p>© 2026 – Villa CABOUA – Location saisonnière</p>
+</footer>
+
+<!-- WhatsApp flottant -->
+<a href="#" class="whatsapp-float" onclick="openWhatsApp(); return false;">
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+<path d="M19.11 17.93c-.27-.14-1.61-.79-1.86-.88-.25-.09-.43-.14-.61.14-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.07-.27-.14-1.14-.42-2.17-1.34-.8-.71-1.34-1.59-1.5-1.86-.16-.27-.02-.41.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.48-.84-2.03-.22-.53-.44-.46-.61-.47h-.52c-.18 0-.48.07-.73.34-.25.27-.95.93-.95 2.27 0 1.34.98 2.63 1.11 2.82.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.58.66.21 1.27.18 1.75.11.53-.08 1.61-.66 1.84-1.29.23-.63.23-1.18.16-1.29-.07-.11-.25-.18-.52-.32zM16.02 3C9.4 3 4 8.4 4 15.02c0 2.64.86 5.09 2.32 7.08L4 29l7.1-2.28a11.96 11.96 0 004.92 1.04h.01c6.62 0 12.02-5.4 12.02-12.02C28.05 8.4 22.65 3 16.02 3z"/>
+</svg>
+</a>
+
+<script>
+// WhatsApp
+function openWhatsApp(){
+  const start=document.getElementById('startDate').value;
+  const end=document.getElementById('endDate').value;
+  const guests=document.getElementById('guests').value;
+  if(!start||!end){alert("Veuillez sélectionner les dates."); return;}
+  const message=`Bonjour, je souhaite réserver la Villa CABOUA.%0ADates : ${start} → ${end}%0ANombre de voyageurs : ${guests}`;
+  window.open(`https://wa.me/590690520616?text=${message}`,'_blank');
+}
+
+// Contact email
+document.getElementById('contactHost').addEventListener('click',()=>{
+  window.location.href="mailto:villa.caboua@gmail.com?subject=Demande de réservation – Villa CABOUA";
+});
+
+// FullCalendar
+document.addEventListener('DOMContentLoaded', function(){
+  const calendarEl=document.getElementById('calendar');
+  const today=new Date();
+  const calendar=new FullCalendar.Calendar(calendarEl,{
+    initialView:'dayGridMonth',
+    locale:'fr',
+    googleCalendarApiKey:'AIzaSyAnLIfv6qKVJmXrVLtHPy1KAriZaO7pE2Y',
+    events:{googleCalendarId:'412702464d4437ebd96ca3dfe4e46487e858bd35c61aaa93ca04fb2a1ea63ccd@group.calendar.google.com'},
+    headerToolbar:{left:'prev,next today',center:'title',right:''},
+    selectable:true,
+    eventColor:'#dcdcdc',
+    select:function(info){
+      document.getElementById('startDate').value=info.startStr;
+      document.getElementById('endDate').value=info.endStr;
+      updatePrice();
+    }
+  });
+  calendar.render();
+});
+
+// Prix calculé
+const pricePerNight=180;
+const taxPerPerson=1.5;
+const cleaningFee=120;
+const minNights=4;
+
+function updatePrice(){
+  const start=document.getElementById('startDate').value;
+  const end=document.getElementById('endDate').value;
+  const guests=parseInt(document.getElementById('guests').value);
+  if(!start||!end) return;
+  const d1=new Date(start);
+  const d2=new Date(end);
+  let nights=(d2-d1)/(1000*60*60*24);
+  if(nights<minNights) {document.getElementById('totalPrice').innerText=`Séjour minimum ${minNights} nuits`; return;}
+  const priceRental = nights*pricePerNight;
+  const tax = nights*guests*taxPerPerson;
+  const total = priceRental + tax + cleaningFee;
+  document.getElementById('totalPrice').innerText=`Prix total : ${total.toFixed(2)} € (${nights} nuits)`;
+}
+
+// Animation cartes équipements
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');}});
+},{threshold:0.15});
+document.querySelectorAll('.card').forEach(card=>observer.observe(card));
+
+// Stripe Checkout
+const stripe = Stripe('YOUR_PUBLISHABLE_KEY'); // <-- Remplace par ta clé publique Stripe
+document.getElementById('bookNow').addEventListener('click',async ()=>{
+  const start=document.getElementById('startDate').value;
+  const end=document.getElementById('endDate').value;
+  const guests=document.getElementById('guests').value;
+  if(!start||!end){alert("Veuillez sélectionner les dates.");return;}
+  const response = await fetch('/api/create-checkout-session', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({start,end,guests})
+  });
+  const session = await response.json();
+  stripe.redirectToCheckout({sessionId:session.id});
+});
+</script>
+
+</body>
+</html>
