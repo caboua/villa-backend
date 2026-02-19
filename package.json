@@ -1,8 +1,11 @@
 {
   "name": "villa-caboua",
   "version": "1.0.0",
-  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vercel dev"
+  },
   "dependencies": {
-    "stripe": "^14.0.0"
+    "stripe": "^12.20.0"
   }
 }
